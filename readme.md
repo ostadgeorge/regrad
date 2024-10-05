@@ -19,3 +19,12 @@ backtrack in rust
     assert_eq!(v2.gradient(), 1.44);
     assert_eq!(v3.gradient(), 1.0);
 ```
+
+## TODO
+- [ ] Add more operations
+- [ ] Add Tensor support
+- [ ] Crates.io publish
+- [ ] Add more tests
+- [ ] Add more examples
+- [ ] Add more documentation
+- [ ] Add GPU support
