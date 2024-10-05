@@ -1,6 +1,6 @@
 [package]
 name = "regrad"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "A simple library to backpropagate gradients through a computation graph"
 license = "MIT"

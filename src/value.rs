@@ -67,6 +67,63 @@ impl Value {
     }
 }
 
+impl Value {
+    pub fn tanh(&self) -> Value {
+        let data = self.data().tanh();
+        let propagate: BackPropagteFn = |value: &Ref<ValueInternal>| {
+            let gradient = value.gradient;
+            let data = value.data;
+
+            value.previous[0].internal.borrow_mut().gradient += gradient * (1.0 - data * data);
+        };
+
+        Value::new(ValueInternal::new(
+            data,
+            None,
+            Some(Operation::Mul),
+            vec![self.clone()],
+            Some(propagate),
+        ))
+    }
+
+    pub fn pow(&self, n: &Value) -> Value {
+        let data = self.data().powf(n.data());
+        let propagate: BackPropagteFn = |value: &Ref<ValueInternal>| {
+            let gradient = value.gradient;
+            let data = value.data;
+            let n = value.previous[1].internal.borrow().data;
+
+            value.previous[0].internal.borrow_mut().gradient += gradient * n * data.powf(n - 1.0);
+        };
+
+        Value::new(ValueInternal::new(
+            data,
+            None,
+            Some(Operation::Mul),
+            vec![self.clone(), n.clone()],
+            Some(propagate),
+        ))
+    }
+
+    pub fn relu(&self) -> Value {
+        let data = self.data().max(0.0);
+        let propagate: BackPropagteFn = |value: &Ref<ValueInternal>| {
+            let gradient = value.gradient;
+            let data = value.data;
+
+            value.previous[0].internal.borrow_mut().gradient += gradient * ((data > 0.0) as i32 as f64);
+        };
+
+        Value::new(ValueInternal::new(
+            data,
+            None,
+            Some(Operation::Mul),
+            vec![self.clone()],
+            Some(propagate),
+        ))
+    }
+}
+
 impl Hash for Value {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         self.internal.borrow().hash(state);
