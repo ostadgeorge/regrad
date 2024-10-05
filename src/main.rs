@@ -275,6 +275,7 @@ fn main() {
     let v4 = &(&v1 * &v1) * &v2;
 
     dbg!(v4.data());
+    assert_eq!(v4.data(), 4.896);
 
     v4.backward();
     dbg!(v1.gradient());
