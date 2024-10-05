@@ -280,4 +280,9 @@ fn main() {
     dbg!(v1.gradient());
     dbg!(v2.gradient());
     dbg!(v4.gradient());
+
+    assert_eq!(v1.gradient(), 8.16);
+    assert_eq!(v2.gradient(), 1.44);
+    assert_eq!(v4.gradient(), 1.0);
+
 }
